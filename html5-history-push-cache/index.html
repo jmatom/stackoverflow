@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Demo</title>
+</head>
+<body>
+ 
+<a href="#" class="goto" data-service="ip" data-url="http://ip.jsontest.com/?callback=?">IP</a>
+<br>
+<a href="#" class="goto" data-service="date" data-url="http://date.jsontest.com/?callback=?">Date</a>
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script>
+var getDataFromUrl = function(url, params, hash, callback) {
+    var data = JSON.parse(localStorage.getItem(hash));
+ 
+    if(data) {
+        console.log('data from cache');
+        callback(data);
+    } else {
+        $.ajax({
+            url: url,
+            method: 'GET',
+            dataType: 'jsonp',
+            jsonp: "callback",
+                contentType: "application/json"
+        }).success(function(data) {
+            localStorage.setItem(hash, JSON.stringify(data));
+            callback(data);
+        });
+    }
+};
+ 
+var renderData = function(data) {
+    console.log('render data:', data);
+};
+ 
+$(".goto").on('click', function(e) {
+    e.preventDefault();
+    var $this = $(this);
+    var url = $this.data('url');
+    var params = $this.data('params');
+    var hash = $this.data('service');
+   
+    getDataFromUrl(url, params, hash, function(data) {
+        history.pushState({data: data}, null, hash);
+        renderData(data);
+    });
+});
+ 
+window.onpopstate = function(e) {
+    e.preventDefault();
+ 
+    if(e.state) {
+        var data = e.state;
+        renderData(data);
+    }
+};
+</script>
+ 
+</body>
+</html>
