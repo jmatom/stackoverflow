@@ -2,7 +2,7 @@
 **Question:** [Send code via post message is not working](http://stackoverflow.com/questions/30839777/send-code-via-post-message-is-not-working)
 
 ## How to test
-$npm install
+$npm install  
 $npm start
 
 ## output
