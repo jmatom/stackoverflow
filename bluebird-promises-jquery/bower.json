@@ -1,0 +1,12 @@
+{
+  "name": "bluebird-promises-jquery",
+  "version": "1.0.0",
+  "homepage": "https://github.com/josemato/stackoverflow",
+  "description": "Example using bluebird to promisify jquery and wait for several requests",
+  "main": "index.html",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "~2.9.30",
+    "jquery": "~2.1.4"
+  }
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>JQuery kind of promise</title>
+</head>
+<body>
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/bluebird/js/browser/bluebird.min.js"></script>
+<script>
+
+var ajaxSingleCall = function ajaxSingleCall() {
+	return new Promise(function(resolve, reject) {
+		$.getJSON('php_side.php', function(data) {
+       		resolve(data);
+		}).fail(function(e) {
+			reject(e);
+		});
+	});
+};
+
+var ajaxCallMultiple = function ajaxCallMultiple() {
+	var promises = [];
+
+	for(var i = 0; i < 3; i++) {
+		promises.push(ajaxSingleCall());
+	}
+
+	return promises;
+};
+
+var loopTheTable = function loopTheTable(data) {
+	for(var i = 0; i < data.length; i++) {
+		console.log('timeWait for server', data[i].timeWait);
+   }
+};
+
+// Example 1: Do only one request and transform server data to array
+ajaxSingleCall().then(function(data) {
+	console.log('ajaxSingleCall', data);
+	return [data];
+}).then(loopTheTable);
+
+// Example 2: Do a lot of requests waiting for all
+Promise.all(ajaxCallMultiple()).then(function(data) {
+	console.log('All multiple data:', data);
+	return data;
+}).then(loopTheTable);
+
+</script>
+</body>
+</html>
